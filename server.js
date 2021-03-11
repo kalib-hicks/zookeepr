@@ -1,6 +1,7 @@
 const express = require('express');
 const { animals } = require('./data/animals');
 
+// PORT
 const PORT = process.env.PORT | | 3001;
 // instantiate the server
 // assign express() to the app variable so that
@@ -46,6 +47,11 @@ filteredREsults = filteredResults.filter(
     }
     return filteredResults;
 }
+
+//takes id and array of animals and returns single animal object
+function findById(id, animalsArray) {
+    cosnt result = animalsArray.filter(animal => animal.id === id)[0];
+}
 // add route 
 // .get requires two arguments :
 // 1: string that describes 
@@ -54,12 +60,12 @@ filteredREsults = filteredResults.filter(
 // that the route is accessed with a GET request
 // send() from the res parameter to send 
 // the string "Hello! to the client"
-app.get('/api/animals', (req, res) => {
-    let results = animals;
-    if (req.query) {
-        resutls = filterByQuery(req.query, results);
-    }
-    res.json(results);
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    if (result) {
+        res.json(result);
+    } else {
+        res.send(404);
 });
 
 // chain the listen() method onto the server
